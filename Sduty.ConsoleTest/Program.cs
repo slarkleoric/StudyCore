@@ -31,11 +31,10 @@ namespace Sduty.ConsoleTest
             Console.ReadKey();
         }
         */
-        /*
         /// <summary>
         /// core的 configuration 配置调用
         /// </summary>
-        /// <param name="args"></param>
+        ///<param name="args"></param>
         static void Main(string[] args)
         {
             Dictionary<string, string> source = new Dictionary<string, string>
@@ -57,35 +56,5 @@ namespace Sduty.ConsoleTest
 
             Console.ReadKey();
         }
-        */
-
-       
-            public static async Task Main()
-            {
-                await new WebHostBuilder()
-                    .UseHttpListener()
-                    .Configure(app => app
-                        .Use(FooMiddleware)
-                        .Use(BarMiddleware)
-                        .Use(BazMiddleware))
-                    .Build()
-                    .StartAsync();
-            }
-
-            public static RequestDelegate FooMiddleware(RequestDelegate next)
-            => async context => {
-                await context.Response.WriteAsync("Foo=>");
-                await next(context);
-            };
-
-            public static RequestDelegate BarMiddleware(RequestDelegate next)
-            => async context => {
-                await context.Response.WriteAsync("Bar=>");
-
-                await next(context);
-            };
-
-            public static RequestDelegate BazMiddleware(RequestDelegate next)
-            => context => context.Response.WriteAsync("Baz");
     }
 }
