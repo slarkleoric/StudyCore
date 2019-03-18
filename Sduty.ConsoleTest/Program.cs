@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Sduty.ConsoleTest.Configuration;
 using Sduty.ConsoleTest.Redis;
 using Sduty.ConsoleTest.SeviceProvider;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sduty.ConsoleTest
@@ -38,28 +38,15 @@ namespace Sduty.ConsoleTest
         ///<param name="args"></param>
         static void Main(string[] args)
         {
-            //Dictionary<string, string> source = new Dictionary<string, string>
-            //{
-            //    ["LongDatePattern"] = "dddd, MMMM d, yyyy",
-            //    ["LongTimePattern"] = "h:mm:ss tt",
-            //    ["ShortDatePattern"] = "M/d/yyyy",
-            //    ["ShortTimePattern"] = "h:mm tt"
-            //};
-            //IConfiguration configuration = new ConfigurationBuilder()
-            //        .Add(new MemoryConfigurationSource() { InitialData = source })
-            //        .Build();
-
-            //DateTimeFormatSettings settings = new DateTimeFormatSettings(configuration);
-            //Console.WriteLine("{0,-16}: {1}", "LongDatePattern", settings.LongDatePattern);
-            //Console.WriteLine("{0,-16}: {1}", "LongTimePattern", settings.LongTimePattern);
-            //Console.WriteLine("{0,-16}: {1}", "ShortDatePattern", settings.ShortDatePattern);
-            //Console.WriteLine("{0,-16}: {1}", "ShortTimePattern", settings.ShortTimePattern);
-
-
+            RedisCacheHelper.Add<string>("mystring", "123456", new TimeSpan(10000));
 
             var redis = RedisCacheHelper.Get<string>("mystring");
+
+            Console.WriteLine(redis);
 
             Console.ReadKey();
         }
     }
+
+    
 }

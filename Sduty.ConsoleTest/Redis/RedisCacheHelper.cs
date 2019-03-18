@@ -17,22 +17,24 @@ namespace Sduty.ConsoleTest.Redis
 
         static RedisCacheHelper()
         {
-            var redisHostStr = "127.0.0.1:6379";
 
-            if (!string.IsNullOrEmpty(redisHostStr))
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+
+            var ip = builder["Redis:IP"];
+            var port = builder["Redis:Port"];
+            redisHosts = new string[] { "a123456@"+ ip + ":" + port };
+            if (redisHosts.Length > 0)
             {
-                redisHosts = redisHostStr.Split(',');
-
-                if (redisHosts.Length > 0)
-                {
-                    pool = new PooledRedisClientManager(redisHosts, redisHosts,
-                        new RedisClientManagerConfig()
-                        {
-                            MaxWritePoolSize = RedisMaxWritePool,
-                            MaxReadPoolSize = RedisMaxReadPool,
-                            AutoStart = true
-                        });
-                }
+                pool = new PooledRedisClientManager(redisHosts, redisHosts,
+                    new RedisClientManagerConfig()
+                    {
+                        MaxWritePoolSize = RedisMaxWritePool,
+                        MaxReadPoolSize = RedisMaxReadPool,
+                        AutoStart = true
+                    });
             }
         }
         public static void Add<T>(string key, T value, DateTime expiry)
@@ -93,7 +95,7 @@ namespace Sduty.ConsoleTest.Redis
                         if (r != null)
                         {
                             r.SendTimeout = 1000;
-                            r.Set(key, value, slidingExpiration);
+                            bool f= r.Add<T>(key, value);
                         }
                     }
                 }
